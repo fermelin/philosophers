@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gettimeofday.c                                     :+:      :+:    :+:   */
+/*   philo_one.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/19 16:37:27 by fermelin          #+#    #+#             */
-/*   Updated: 2021/02/19 16:52:54 by fermelin         ###   ########.fr       */
+/*   Created: 2021/03/11 18:04:31 by fermelin          #+#    #+#             */
+/*   Updated: 2021/03/11 18:11:18 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef PHILO_ONE_H
+#define PHILO_ONE_H
+
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
-#include <string.h>
 #include <pthread.h>
 #include <sys/time.h>
 
-int
+int		ft_atoi(const char *nbr)
 
-
-     gettimeofday(struct timeval *restrict tp, void *restrict tzp);
-
-int	main(void)
-{
-	struct timeval tp;
-
-	gettimeofday(&tp, NULL);
-	printf("%ld\n", tp.tv_sec);
-	printf("%d\n", tp.tv_usec);
-
-	return (0);
-}
+#endif

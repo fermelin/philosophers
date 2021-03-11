@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   philo_one.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/13 17:20:01 by fermelin          #+#    #+#             */
-/*   Updated: 2021/02/19 16:25:10 by fermelin         ###   ########.fr       */
+/*   Created: 2021/02/19 16:35:54 by fermelin          #+#    #+#             */
+/*   Updated: 2021/03/11 18:19:13 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 
 typedef struct s_all
@@ -77,3 +78,41 @@ int main(int argc, char **argv)
 	printf("%d\n", h_g);
 
 }
+
+int		main(int argc, char **argv)
+{
+	t_all 	all;
+
+	if (argc != 5 || argc != 6)
+	{
+		printf("ERROR: Wrong number of arguments\n");
+		return (0);
+	}
+	
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
