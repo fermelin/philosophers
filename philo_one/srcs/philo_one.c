@@ -6,92 +6,111 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 16:35:54 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/11 18:19:13 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/13 17:32:02 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <pthread.h>
-#include <sys/time.h>
+#include "philo_one.h"
 
-
-typedef struct s_all
+int		error_processing(int error_number)
 {
-	int 			smth;
-	pthread_mutex_t mutex;
-}				t_all;
-
-int h_g = 0;
-
-void	*routine(void *structure)
-{
-
-	t_all *all = (t_all*)structure;
-	int loops = all->smth;
-	int loc, i;
-	unsigned long self_thread_id = (unsigned long)pthread_self();
-
-	i = 0;
-	while (i < loops)
-	{
-		// pthread_mutex_lock(&all->mutex);
-		loc = h_g;
-		loc++;
-		h_g = loc;
-		i++;
-		// pthread_mutex_unlock(&all->mutex);
-		// printf("%lu\n", self_thread_id);
-	}
-	return (NULL);
+	if (error_number == E_ARG_NUM)
+		printf("%s\n", E_ARG_NUM_TXT);
+	else if (error_number == E_INIT)
+		printf("%s\n", E_INIT_TXT);
+	return (error_number);
 }
 
 
-int main(int argc, char **argv)
+int		init_all_params(t_all *all, t_params *params, char **argv, int argc)
 {
-	t_all structure;
-	pthread_t			thread_id;
-	pthread_t			thread_id1;
-	unsigned long int	i;
-	int					status;
+	params->number_of_philisophers = ft_atoi(argv[1]);
+	params->time_to_die = ft_atoi(argv[2]);
+	params->time_to_eat = ft_atoi(argv[3]);
+	params->tme_to_sleep = ft_atoi(argv[4]);
+	if (argc == 6)
+		params->times_must_eat = ft_atoi(argv[5]);
+	else
+		params->times_must_eat = 0;
+	if (!(all->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
+		* params->number_of_philisophers)))
+		return (1);
+	memset(all->forks, 0, (sizeof(int) * params->number_of_philisophers));
+	if (!(all->thread_id =(pthread_t *)malloc(sizeof(pthread_t)
+		* params->number_of_philisophers)))
+		return (1);
+}
 
+int		thinking(t_params *params)
+{
+	usleep(params->time_to_sleep * 1000);
+	return (0);
+}
 
-	structure.smth = (argc > 1) ? atoi(argv[1]) : 10000000;
-	pthread_mutex_init(&structure.mutex, NULL);
-	i = 0;
-	status = pthread_create(&thread_id, NULL, &routine, &structure);
-	if (status != 0)
-		printf("%s\n", "pthread_create error");
-	// routine(smth);
-	status = pthread_create(&thread_id1, NULL, &routine, &structure);
-	if (status != 0)
-		printf("%s\n", "pthread_create error");
+int		sleeping(t_params *params)
+{
+	usleep(params->time_to_sleep * 1000);
+	return (0);
+}
 
-	status = pthread_join(thread_id, NULL);
-	if (status != 0)
-		printf("%s\n", "pthread_join error");
-	status = pthread_join(thread_id1, NULL);
-	if (status != 0)
-		printf("%s\n", "pthread_join error");
+int		eating(t_params *params)
+{
+	struct timeval before;
+	struct timeval after;
 
-	printf("%d\n", h_g);
+	gettimeofday(&before, NULL);
+	usleep(params->time_to_eat * 1000);
+	gettimeofday(&after, NULL);
+	printf()
+	return (0);
+}
 
+void	*philosopher_routine(void *arg)
+{
+	t_all	*all;
+
+	all = (t_all *)arg;
+	eating(t_params *params)
 }
 
 int		main(int argc, char **argv)
 {
-	t_all 	all;
+	t_all		all;
+	t_params	params;
+	int			i;
 
-	if (argc != 5 || argc != 6)
+	if (!(argc == 5 || argc == 6))
+		return (error_processing(E_ARG_NUM));
+	if (init_all_params(&all, &params, argv, argc) != 0)
+		return (error_processing(E_INIT));
+	all->params = &params;
+	i = 0;
+	while (i < all.threads_amount)
 	{
-		printf("ERROR: Wrong number of arguments\n");
-		return (0);
+		if (pthread_create(&all->thread_id[i], NULL, &philosopher_routine, &all) != 0)
+			printf("%d pthread_create error\n", i);
+		i++;
 	}
-	
+	i = 0;
+	while (i < all.threads_amount)
+	{
+		if (pthread_join(thread_id[i], NULL) != 0)
+			printf("%d pthread_join error\n", i);
+		i++;
+	}
+
+
+
+
+
+
 
 }
 
+void	get_philosopher_number(void)
+{
+	while 
+}
 
 
 
