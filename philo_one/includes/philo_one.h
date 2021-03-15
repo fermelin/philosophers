@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:04:31 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/13 17:32:03 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/15 18:05:39 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <sys/time.h>
+#include <string.h>
 
 # define E_ARG_NUM 10
 # define E_ARG_NUM_TXT "ERROR: Wrong number of arguments"
@@ -27,7 +28,7 @@
 
 typedef struct		s_params
 {
-	int				number_of_philosophers;
+	int				amount_of_philosophers;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -38,13 +39,25 @@ typedef struct		s_params
 typedef struct		s_all
 {
 	pthread_mutex_t	*forks;
-	// pthread_mutex_t	mutex;
+	int				tmp_philo_personal_number;
+	struct timeval	initial_time;
+	pthread_mutex_t	mutex_for_getting_philo_number;
 	pthread_t		*thread_id;
 	t_params		*params;
+	// t_philo			*philos;
+	ssize_t			*time_of_last_meal;
+	int				is_philo_dead;
 
 }					t_all;
 
+// typedef struct		s_philo
+// {
+// 	// int		philo_personal_number;
+// 	ssize_t	last_ate;
 
-int		ft_atoi(const char *nbr)
+// }					t_philo;
+
+
+int		ft_atoi(const char *nbr);
 
 #endif

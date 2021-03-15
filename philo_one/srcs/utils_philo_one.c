@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:03:49 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/11 18:04:22 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/15 14:23:22 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		ft_atoi(const char *nbr)
 		sign = (nbr[i] == '-') ? -1 : 1;
 		i++;
 	}
-	while (ft_isdigit(nbr[i]))
+	while (nbr[i] >= '0' && nbr[i] <= '9')
 	{
 		if ((res * 10 + (nbr[i] - '0')) < res)
 			return ((sign > 0) ? -1 : 0);
