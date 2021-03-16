@@ -6,7 +6,7 @@
 #    By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/21 17:30:58 by fermelin          #+#    #+#              #
-#    Updated: 2021/03/16 19:16:55 by fermelin         ###   ########.fr        #
+#    Updated: 2021/03/16 22:12:45 by fermelin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,8 @@ $(NAME): $(OBJ)
 
 clean:
 		rm -f $(OBJ)
+		rm -rf $(NAME).dSYM
+		rm -f ./srcs/.DS_Store
 
 fclean: clean
 		rm -f $(NAME)

@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/05 10:50:10 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/15 15:02:54 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/16 13:52:30 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ int	main(void)
 	printf("hrs %ld\n", hrs);
 	printf("days %ld\n", days);
 	printf("yrs %ld\n", yrs);
+	printf("short int is %lu\n", sizeof(short int));
 	return (0);
 }
