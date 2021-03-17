@@ -5,17 +5,16 @@
 #                                                     +:+ +:+         +:+      #
 #    By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/03/16 22:12:45 by fermelin          #+#    #+#              #
-#    Updated: 2021/03/17 18:52:41 by fermelin         ###   ########.fr        #
+#    Created: 2021/03/17 13:22:48 by fermelin          #+#    #+#              #
+#    Updated: 2021/03/17 13:24:46 by fermelin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = philo_one
+NAME = philo_two
 
-SRC =	./srcs/main_philo_one.c \
-		./srcs/utils_philo_one.c \
-		./srcs/utils2_philo_one.c \
-		./srcs/actions_philo_one.c
+SRC =	./srcs/philo_two.c \
+		./srcs/utils_philo_two.c \
+		./srcs/actions_philo_two.c
 
 OBJ = $(SRC:.c=.o)
 

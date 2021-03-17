@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_one.c                                        :+:      :+:    :+:   */
+/*   main_philo_one.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 16:35:54 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/16 22:20:09 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/17 18:59:42 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int		error_processing(int error_number, t_all *all)
 			if (pthread_mutex_destroy(&all->m_forks[i++]) != 0)
 				printf("mutex_destroy error\n");
 		pthread_mutex_destroy(&all->mutex_for_getting_philo_number);
+		pthread_mutex_destroy(&all->m_is_philo_dead);
+
 	}
 	if (error_number == E_MALLOC || error_number == JUST_FREE_ALL)
 	{
@@ -64,7 +66,7 @@ int		init_all_params_2(t_all *all)
 		all->forks_status[i] = i + 1 - i % 2;
 		i++;
 	}
-	pthread_mutex_init(&all->mutex_for_getting_philo_number, NULL);
+	
 	gettimeofday(&all->initial_time, NULL);
 	return (0);
 }
@@ -92,6 +94,8 @@ int		init_all_params(t_all *all, char **argv, int argc)
 	all->time_of_last_meal = NULL;
 	all->forks_status = NULL;
 	all->thread_id = NULL;
+	pthread_mutex_init(&all->mutex_for_getting_philo_number, NULL);
+	pthread_mutex_init(&all->m_is_philo_dead, NULL);
 	return (init_all_params_2(all));
 }
 

@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_one.h                                        :+:      :+:    :+:   */
+/*   philo_two.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/11 18:04:31 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/17 19:02:43 by fermelin         ###   ########.fr       */
+/*   Created: 2021/03/17 13:01:02 by fermelin          #+#    #+#             */
+/*   Updated: 2021/03/17 15:34:06 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_ONE_H
-# define PHILO_ONE_H
+#ifndef PHILO_TWO_H
+# define PHILO_TWO_H
 
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
+# include <semaphore.h>
 
 # define E_ARG_NUM 10
 # define E_ARG_NUM_TXT "ERROR: Wrong number of arguments"
@@ -41,9 +42,8 @@ typedef struct		s_params
 
 typedef struct		s_all
 {
-	pthread_mutex_t	*m_forks;
-	pthread_mutex_t	mutex_for_getting_philo_number;
-	pthread_mutex_t	m_is_philo_dead;
+	sem_t			*s_forks;
+	sem_t			*sem_for_getting_philo_number;
 	pthread_t		*thread_id;
 	int				*forks_status;
 	int				tmp_philo_num;
@@ -62,12 +62,10 @@ int					get_philosopher_number(t_all *all);
 int					thinking(t_all *all, int philo_num);
 int					sleeping(t_all *all, int philo_num);
 int					take_forks(t_all *all, int philo_num);
-int					put_forks(t_all *all, int philo_num);
+int					put_forks(t_all *all);
 int					eating(t_all *all, int philo_num);
 int					left_fork_num(t_all *all, int philo_num);
 int					right_fork_num(t_all *all, int philo_num);
 ssize_t				get_current_timestamp(t_all *all);
-int					check_philo_status(t_all *all);
-
 
 #endif
