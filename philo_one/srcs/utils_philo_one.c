@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:03:49 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/17 19:08:16 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/18 15:19:24 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ int		get_philosopher_number(t_all *all)
 	return (tmp_philo_number);
 }
 
-ssize_t	get_current_timestamp(t_all *all)
+unsigned int	get_current_timestamp(t_all *all)
 {
 	struct timeval	current_time;
-	ssize_t			timestamp;
+	unsigned int	timestamp;
 
 	gettimeofday(&current_time, NULL);
 	timestamp = (current_time.tv_sec - all->initial_time.tv_sec) * 1000

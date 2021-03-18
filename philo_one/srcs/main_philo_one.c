@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 16:35:54 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/17 18:59:42 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/18 14:21:48 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int		init_all_params(t_all *all, char **argv, int argc)
 	all->thread_id = NULL;
 	pthread_mutex_init(&all->mutex_for_getting_philo_number, NULL);
 	pthread_mutex_init(&all->m_is_philo_dead, NULL);
+	pthread_mutex_init(&all->m_output_protect, NULL);
 	return (init_all_params_2(all));
 }
 

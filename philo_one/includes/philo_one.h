@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:04:31 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/17 19:02:43 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/18 18:17:04 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct		s_all
 	pthread_mutex_t	*m_forks;
 	pthread_mutex_t	mutex_for_getting_philo_number;
 	pthread_mutex_t	m_is_philo_dead;
+	pthread_mutex_t	m_output_protect;
 	pthread_t		*thread_id;
 	int				*forks_status;
 	int				tmp_philo_num;
@@ -66,8 +67,10 @@ int					put_forks(t_all *all, int philo_num);
 int					eating(t_all *all, int philo_num);
 int					left_fork_num(t_all *all, int philo_num);
 int					right_fork_num(t_all *all, int philo_num);
-ssize_t				get_current_timestamp(t_all *all);
+unsigned int		get_current_timestamp(t_all *all);
 int					check_philo_status(t_all *all);
+int					print_status(t_all *all, ssize_t timestamp, int philo_num, char *kind_of_action);
+int					pseudo_usleep(t_all *all, int action_time);
 
 
 #endif

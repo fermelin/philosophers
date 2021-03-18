@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 14:00:28 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/17 19:08:20 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/18 18:15:33 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 int		thinking(t_all *all, int philo_num)
 {
-	ssize_t timestamp;
+	unsigned int timestamp;
 
 	timestamp = get_current_timestamp(all);
 	if (check_philo_status(all) == 0 && timestamp - all->time_of_last_meal
 		[philo_num - 1] <= all->params.time_to_die)
-		printf("%zd %d is thinking\n", timestamp, philo_num);
+		print_status(all, timestamp, philo_num, "is thinking");
+		// printf("%zd %d is thinking\n", timestamp, philo_num);
 	else
 		return (philo_death(all, timestamp, philo_num));
 	return (0);
@@ -27,21 +28,22 @@ int		thinking(t_all *all, int philo_num)
 
 int		sleeping(t_all *all, int philo_num)
 {
-	ssize_t timestamp;
+	unsigned int timestamp;
 
 	timestamp = get_current_timestamp(all);
 	if (check_philo_status(all) == 0 && timestamp - all->time_of_last_meal
 		[philo_num - 1] <= all->params.time_to_die)
-		printf("%zd %d is sleeping\n", timestamp, philo_num);
+		print_status(all, timestamp, philo_num, "is sleeping");
+		// printf("%zd %d is sleeping\n", timestamp, philo_num);
 	else
 		return (philo_death(all, timestamp, philo_num));
-	usleep(all->params.time_to_sleep * 1000);
+	pseudo_usleep(all, all->params.time_to_sleep);
 	return (0);
 }
 
 int		take_forks(t_all *all, int philo_num)
 {
-	ssize_t timestamp;
+	unsigned int timestamp;
 
 	if (check_philo_status(all) == 0)
 	{
@@ -51,11 +53,15 @@ int		take_forks(t_all *all, int philo_num)
 			timestamp = get_current_timestamp(all);
 			pthread_mutex_lock(&all->m_forks[philo_num - 1]);
 			all->forks_status[philo_num - 1] = philo_num;
-			printf("%zd %d has taken a fork\n", timestamp, philo_num);
+			if (check_philo_status(all) == 0)
+				print_status(all, timestamp, philo_num, "has taken a fork");
+				// printf("%zd %d has taken a fork\n", timestamp, philo_num);
 			pthread_mutex_lock(&all->m_forks
 				[right_fork_num(all, philo_num - 1)]);
 			all->forks_status[right_fork_num(all, philo_num - 1)] = philo_num;
-			printf("%zd %d has taken a fork\n", timestamp, philo_num);
+			if (check_philo_status(all) == 0)
+				print_status(all, timestamp, philo_num, "has taken a fork");
+				// printf("%zd %d has taken a fork\n", timestamp, philo_num);
 		}
 		else
 			return (1);
@@ -72,19 +78,20 @@ int		put_forks(t_all *all, int philo_num)
 
 int		eating(t_all *all, int philo_num)
 {
-	ssize_t timestamp;
+	unsigned int timestamp;
 
 	timestamp = get_current_timestamp(all);
 	if (check_philo_status(all) == 0 && timestamp -
 		all->time_of_last_meal[philo_num - 1] <= all->params.time_to_die)
-		printf("%zd %d is eating\n", timestamp, philo_num);
+		print_status(all, timestamp, philo_num, "is eating");
+		// printf("%zd %d is eating\n", timestamp, philo_num);
 	else
 	{
 		put_forks(all, philo_num);
 		return (philo_death(all, timestamp, philo_num));
 	}
 	all->time_of_last_meal[philo_num - 1] = timestamp;
-	usleep(all->params.time_to_eat * 1000);
+	pseudo_usleep(all, all->params.time_to_eat);
 	put_forks(all, philo_num);
 	return (0);
 }

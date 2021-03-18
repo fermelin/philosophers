@@ -6,7 +6,7 @@
 #    By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/16 22:12:45 by fermelin          #+#    #+#              #
-#    Updated: 2021/03/17 18:52:41 by fermelin         ###   ########.fr        #
+#    Updated: 2021/03/18 18:39:57 by fermelin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ OBJ = $(SRC:.c=.o)
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -g -I ./includes
+CFLAGS = -Wall -Wextra  -g -I ./includes #-Werror
 
 .PHONY = all clean fclean re
 
