@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_philo_one.c                                  :+:      :+:    :+:   */
+/*   utils_philo_three.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:03:49 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/18 20:52:19 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/18 22:41:02 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_three.h"
 
 int				ft_atoi(const char *nbr)
 {
@@ -47,9 +47,9 @@ int				philo_death(t_all *all, ssize_t timestamp, int philo_num)
 {
 	if (check_philo_status(all) == 0)
 	{
-		pthread_mutex_lock(&all->m_is_philo_dead);
+		sem_wait(all->s_is_philo_dead);
 		all->is_philo_dead = 1;
-		pthread_mutex_unlock(&all->m_is_philo_dead);
+		sem_post(all->s_is_philo_dead);
 		printf("%zd %d died\n", timestamp, philo_num);
 	}
 	return (1);
@@ -59,10 +59,10 @@ int				get_philosopher_number(t_all *all)
 {
 	int		tmp_philo_number;
 
-	pthread_mutex_lock(&all->mutex_for_getting_philo_number);
+	sem_wait(all->s_for_getting_philo_number);
 	all->tmp_philo_num++;
 	tmp_philo_number = all->tmp_philo_num;
-	pthread_mutex_unlock(&all->mutex_for_getting_philo_number);
+	sem_post(all->s_for_getting_philo_number);
 	return (tmp_philo_number);
 }
 

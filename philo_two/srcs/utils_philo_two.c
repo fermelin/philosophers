@@ -6,13 +6,13 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:03:49 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/17 18:45:11 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/18 21:41:07 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_two.h"
 
-int		ft_atoi(const char *nbr)
+int				ft_atoi(const char *nbr)
 {
 	int				i;
 	int				sign;
@@ -38,38 +38,38 @@ int		ft_atoi(const char *nbr)
 	return (res * sign);
 }
 
-int		right_fork_num(t_all *all, int philo_index)
+int				right_fork_num(t_all *all, int philo_index)
 {
 	return ((philo_index + 1) % all->params.amount_of_philosophers);
 }
 
-int		philo_death(t_all *all, ssize_t timestamp, int philo_num)
+int				philo_death(t_all *all, ssize_t timestamp, int philo_num)
 {
-	if (all->is_philo_dead == 0)
+	if (check_philo_status(all) == 0)
 	{
+		sem_wait(all->s_is_philo_dead);
 		all->is_philo_dead = 1;
+		sem_post(all->s_is_philo_dead);
 		printf("%zd %d died\n", timestamp, philo_num);
 	}
 	return (1);
 }
 
-int		get_philosopher_number(t_all *all)
+int				get_philosopher_number(t_all *all)
 {
 	int		tmp_philo_number;
 
-	printf("sem before= %d\n", *(all->sem_for_getting_philo_number));
-	sem_wait(all->sem_for_getting_philo_number);
-	printf("sem after= %d\n", *(all->sem_for_getting_philo_number));
+	sem_wait(all->s_for_getting_philo_number);
 	all->tmp_philo_num++;
 	tmp_philo_number = all->tmp_philo_num;
-	sem_post(all->sem_for_getting_philo_number);
+	sem_post(all->s_for_getting_philo_number);
 	return (tmp_philo_number);
 }
 
-ssize_t	get_current_timestamp(t_all *all)
+unsigned int	get_current_timestamp(t_all *all)
 {
 	struct timeval	current_time;
-	ssize_t			timestamp;
+	unsigned int	timestamp;
 
 	gettimeofday(&current_time, NULL);
 	timestamp = (current_time.tv_sec - all->initial_time.tv_sec) * 1000

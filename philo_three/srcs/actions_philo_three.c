@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   actions_philo_two.c                                :+:      :+:    :+:   */
+/*   actions_philo_three.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 14:00:28 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/18 22:12:15 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/18 22:40:45 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_three.h"
 
 int		thinking(t_all *all, int philo_num)
 {

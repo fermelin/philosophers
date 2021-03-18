@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/17 13:01:02 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/17 15:34:06 by fermelin         ###   ########.fr       */
+/*   Created: 2021/03/11 18:04:31 by fermelin          #+#    #+#             */
+/*   Updated: 2021/03/18 22:32:34 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,10 @@ typedef struct		s_params
 typedef struct		s_all
 {
 	sem_t			*s_forks;
-	sem_t			*sem_for_getting_philo_number;
+	sem_t			*s_for_getting_philo_number;
+	sem_t			*s_is_philo_dead;
+	sem_t			*s_output_protect;
 	pthread_t		*thread_id;
-	int				*forks_status;
 	int				tmp_philo_num;
 	struct timeval	initial_time;
 	ssize_t			*time_of_last_meal;
@@ -66,6 +67,11 @@ int					put_forks(t_all *all);
 int					eating(t_all *all, int philo_num);
 int					left_fork_num(t_all *all, int philo_num);
 int					right_fork_num(t_all *all, int philo_num);
-ssize_t				get_current_timestamp(t_all *all);
+unsigned int		get_current_timestamp(t_all *all);
+int					check_philo_status(t_all *all);
+int					print_status(t_all *all, ssize_t timestamp, int philo_num,
+					char *kind_of_action);
+int					pseudo_usleep(int action_time);
+int					free_all(t_all *all, int error_number);
 
 #endif

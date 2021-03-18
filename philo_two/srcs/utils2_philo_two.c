@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils2_philo_one.c                                 :+:      :+:    :+:   */
+/*   utils2_philo_two.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:51:52 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/18 21:08:53 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/18 22:35:55 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
 int		free_all(t_all *all, int error_number)
 {
-	int i;
-
 	if (error_number == JUST_FREE_ALL)
 	{
-		i = 0;
-		while (i < all->params.amount_of_philosophers)
-			if (pthread_mutex_destroy(&all->m_forks[i++]) != 0)
-				printf("mutex_destroy error\n");
-		pthread_mutex_destroy(&all->mutex_for_getting_philo_number);
-		pthread_mutex_destroy(&all->m_is_philo_dead);
-		pthread_mutex_destroy(&all->m_output_protect);
+		sem_close(all->s_for_getting_philo_number);
+		sem_close(all->s_forks);
+		sem_close(all->s_is_philo_dead);
+		sem_close(all->s_output_protect);
+		sem_unlink("s_for_getting_philo_number");
+		sem_unlink("s_forks");
+		sem_unlink("s_is_philo_dead");
+		sem_unlink("s_output_protect");
 	}
-	free(all->m_forks);
 	free(all->time_of_last_meal);
-	free(all->forks_status);
 	free(all->thread_id);
 	if (error_number == E_MALLOC)
 		printf("%s\n", E_MALLOC_TXT);
@@ -39,19 +36,19 @@ int		check_philo_status(t_all *all)
 {
 	int	status;
 
-	pthread_mutex_lock(&all->m_is_philo_dead);
+	sem_wait(all->s_is_philo_dead);
 	status = all->is_philo_dead;
-	pthread_mutex_unlock(&all->m_is_philo_dead);
+	sem_post(all->s_is_philo_dead);
 	return (status);
 }
 
 int		print_status(t_all *all, ssize_t timestamp, int philo_num,
 	char *kind_of_action)
 {
-	pthread_mutex_lock(&all->m_output_protect);
+	sem_wait(all->s_output_protect);
 	if (all->is_philo_dead == 0)
 		printf("%zd %d %s\n", timestamp, philo_num, kind_of_action);
-	pthread_mutex_unlock(&all->m_output_protect);
+	sem_post(all->s_output_protect);
 	return (0);
 }
 
@@ -78,7 +75,9 @@ int		pseudo_usleep(int action_time)
 	usleep(action_time * (974));
 	while ((time_to_sleep = is_time_out(&measure_beginning, action_time)) > 0)
 	{
-		if (time_to_sleep > 100)
+		if (time_to_sleep > 1000)
+			usleep(1000);
+		else if (time_to_sleep > 100)
 			usleep(100);
 		else if (time_to_sleep > 10)
 			usleep(10);

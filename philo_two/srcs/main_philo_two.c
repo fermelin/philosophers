@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_two.c                                        :+:      :+:    :+:   */
+/*   main_philo_two.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 16:35:54 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/17 17:18:38 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/18 22:35:40 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,12 @@
 
 int		error_processing(int error_number, t_all *all)
 {
-	int i;
-
 	if (error_number == E_ARG_NUM)
 		printf("%s\n", E_ARG_NUM_TXT);
 	else if (error_number == E_WRONG_ARG)
 		printf("%s\n", E_WRONG_ARG_TXT);
-	else if (error_number == JUST_FREE_ALL)
-	{
-		i = 0;
-		// while (i < all->params.amount_of_philosophers)
-		// 	if (pthread_mutex_destroy(&all->m_forks[i++]) != 0)
-		// 		printf("mutex_destroy error\n");
-		if (sem_close(all->s_forks) != 0)
-			printf("sem_close s_forks error\n");
-		if (sem_unlink("s_forks") != 0)
-			printf("sem_unlink 1 error\n");
-		if (sem_close(all->sem_for_getting_philo_number) != 0)
-			printf("sem_close sfgpn error\n");
-		if (sem_unlink("sem_for_getting_philo_number") != 0)
-			printf("sem_unlink 2 error\n");
-	}
-	if (error_number == E_MALLOC || error_number == JUST_FREE_ALL)
-	{
-		// free(all->m_forks);
-		free(all->time_of_last_meal);
-		free(all->forks_status);
-		free(all->thread_id);
-		if (error_number == E_MALLOC)
-			printf("%s\n", E_MALLOC_TXT);
-	}
+	else
+		return (free_all(all, error_number));
 	return (error_number);
 }
 
@@ -54,31 +30,24 @@ int		init_all_params_2(t_all *all)
 	if (!(all->time_of_last_meal = (ssize_t *)malloc(sizeof(ssize_t)
 		* all->params.amount_of_philosophers)))
 		return (E_MALLOC);
-	if (!(all->forks_status = (int *)malloc(sizeof(int)
-		* all->params.amount_of_philosophers)))
-		return (E_MALLOC);
 	if (!(all->thread_id = (pthread_t *)malloc(sizeof(pthread_t)
 		* all->params.amount_of_philosophers)))
 		return (E_MALLOC);
 	i = 0;
 	while (i < all->params.amount_of_philosophers)
-	{
-		all->time_of_last_meal[i] = 0;
-		all->forks_status[i] = i + 1 - i % 2;
-		i++;
-	}
-	if ((all->sem_for_getting_philo_number = sem_open("sem_for_getting_philo_number", O_CREAT | O_EXCL, 744, 1)) == SEM_FAILED)
-	{
-		// printf("sem_open error 1 \n");							// needed to be changed!!
-		sem_close(all->sem_for_getting_philo_number);
-		sem_unlink("sem_for_getting_philo_number");
-	}
-	if ((all->s_forks = sem_open("s_forks", O_CREAT | O_EXCL, 744, all->params.amount_of_philosophers)) == SEM_FAILED)
-	{
-		// printf("sem_open error 2 \n");							// needed to be changed!!
-		sem_close(all->s_forks);
-		sem_unlink("s_forks");
-	}
+		all->time_of_last_meal[i++] = 0;
+	if ((all->s_for_getting_philo_number = sem_open(
+		"s_for_getting_philo_number", O_CREAT | O_EXCL, 744, 1)) == SEM_FAILED)
+		printf("s_for_getting_philo_number failed\n");
+	if ((all->s_forks = sem_open("s_forks", O_CREAT | O_EXCL, 744,
+		all->params.amount_of_philosophers)) == SEM_FAILED)
+		printf("s_forks failed\n");
+	if ((all->s_is_philo_dead = sem_open("s_is_philo_dead", O_CREAT | O_EXCL,
+		744, 1)) == SEM_FAILED)
+		printf("s_is_philo_dead failed\n");
+	if ((all->s_output_protect = sem_open("s_output_protect", O_CREAT | O_EXCL,
+		744, 1)) == SEM_FAILED)
+		printf("s_output_protect failed\n");
 	gettimeofday(&all->initial_time, NULL);
 	return (0);
 }
@@ -100,11 +69,13 @@ int		init_all_params(t_all *all, char **argv, int argc)
 	}
 	else
 		all->params.times_must_eat = -1;
+	sem_unlink("s_for_getting_philo_number");
+	sem_unlink("s_forks");
+	sem_unlink("s_is_philo_dead");
+	sem_unlink("s_output_protect");
 	all->tmp_philo_num = 0;
 	all->is_philo_dead = 0;
-	all->s_forks = NULL;
 	all->time_of_last_meal = NULL;
-	all->forks_status = NULL;
 	all->thread_id = NULL;
 	return (init_all_params_2(all));
 }
@@ -160,5 +131,5 @@ int		main(int argc, char **argv)
 			printf("%d pthread_join error\n", i);
 		i++;
 	}
-	return (error_processing(JUST_FREE_ALL, &all));
+	return (free_all(&all, JUST_FREE_ALL));
 }
