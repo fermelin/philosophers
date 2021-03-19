@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:51:52 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/18 22:40:59 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/19 12:12:30 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,13 @@ int		free_all(t_all *all, int error_number)
 {
 	if (error_number == JUST_FREE_ALL)
 	{
-		sem_close(all->s_for_getting_philo_number);
 		sem_close(all->s_forks);
 		sem_close(all->s_is_philo_dead);
 		sem_close(all->s_output_protect);
-		sem_unlink("s_for_getting_philo_number");
 		sem_unlink("s_forks");
 		sem_unlink("s_is_philo_dead");
 		sem_unlink("s_output_protect");
 	}
-	free(all->time_of_last_meal);
-	free(all->thread_id);
 	if (error_number == E_MALLOC)
 		printf("%s\n", E_MALLOC_TXT);
 	return (error_number);

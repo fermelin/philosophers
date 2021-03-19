@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 14:00:28 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/18 22:40:45 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/19 12:13:38 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int		thinking(t_all *all, int philo_num)
 	unsigned int timestamp;
 
 	timestamp = get_current_timestamp(all);
-	if (check_philo_status(all) == 0 && timestamp - all->time_of_last_meal
-		[philo_num - 1] <= all->params.time_to_die)
+	if (check_philo_status(all) == 0 && timestamp - all->time_of_last_meal <=
+		all->params.time_to_die)
 		print_status(all, timestamp, philo_num, "is thinking");
 	else
 		return (philo_death(all, timestamp, philo_num));
@@ -30,8 +30,8 @@ int		sleeping(t_all *all, int philo_num)
 	unsigned int timestamp;
 
 	timestamp = get_current_timestamp(all);
-	if (check_philo_status(all) == 0 && timestamp - all->time_of_last_meal
-		[philo_num - 1] <= all->params.time_to_die)
+	if (check_philo_status(all) == 0 && timestamp - all->time_of_last_meal <=
+		all->params.time_to_die)
 		print_status(all, timestamp, philo_num, "is sleeping");
 	else
 		return (philo_death(all, timestamp, philo_num));
@@ -72,14 +72,14 @@ int		eating(t_all *all, int philo_num)
 
 	timestamp = get_current_timestamp(all);
 	if (check_philo_status(all) == 0 && timestamp -
-		all->time_of_last_meal[philo_num - 1] <= all->params.time_to_die)
+		all->time_of_last_meal <= all->params.time_to_die)
 		print_status(all, timestamp, philo_num, "is eating");
 	else
 	{
 		put_forks(all);
 		return (philo_death(all, timestamp, philo_num));
 	}
-	all->time_of_last_meal[philo_num - 1] = timestamp;
+	all->time_of_last_meal = timestamp;
 	pseudo_usleep(all->params.time_to_eat);
 	put_forks(all);
 	return (0);

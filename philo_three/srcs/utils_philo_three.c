@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:03:49 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/18 22:41:02 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/19 11:49:35 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,6 @@ int				philo_death(t_all *all, ssize_t timestamp, int philo_num)
 		printf("%zd %d died\n", timestamp, philo_num);
 	}
 	return (1);
-}
-
-int				get_philosopher_number(t_all *all)
-{
-	int		tmp_philo_number;
-
-	sem_wait(all->s_for_getting_philo_number);
-	all->tmp_philo_num++;
-	tmp_philo_number = all->tmp_philo_num;
-	sem_post(all->s_for_getting_philo_number);
-	return (tmp_philo_number);
 }
 
 unsigned int	get_current_timestamp(t_all *all)

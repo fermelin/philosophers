@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:04:31 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/18 22:41:27 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/19 12:05:03 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include <pthread.h>
 # include <sys/time.h>
 # include <semaphore.h>
+# include <signal.h>
 
 # define E_ARG_NUM 10
 # define E_ARG_NUM_TXT "ERROR: Wrong number of arguments"
@@ -43,13 +43,10 @@ typedef struct		s_params
 typedef struct		s_all
 {
 	sem_t			*s_forks;
-	sem_t			*s_for_getting_philo_number;
 	sem_t			*s_is_philo_dead;
 	sem_t			*s_output_protect;
-	pthread_t		*thread_id;
-	int				tmp_philo_num;
 	struct timeval	initial_time;
-	ssize_t			*time_of_last_meal;
+	ssize_t			time_of_last_meal;
 	int				is_philo_dead;
 	t_params		params;
 }					t_all;
