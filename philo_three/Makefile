@@ -6,7 +6,7 @@
 #    By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/16 22:12:45 by fermelin          #+#    #+#              #
-#    Updated: 2021/03/18 22:41:17 by fermelin         ###   ########.fr        #
+#    Updated: 2021/03/21 17:06:35 by fermelin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,11 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g -I ./includes
 
 .PHONY = all clean fclean re
+
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	CFLAGS += -lpthread
+endif
 
 all: $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:04:31 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/18 22:32:34 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/21 16:56:04 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <pthread.h>
 # include <sys/time.h>
 # include <semaphore.h>
+# include <fcntl.h>
 
 # define E_ARG_NUM 10
 # define E_ARG_NUM_TXT "ERROR: Wrong number of arguments"
