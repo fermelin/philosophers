@@ -1,41 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_philo_two.c                                  :+:      :+:    :+:   */
+/*   utils_ph1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:03:49 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/18 21:41:07 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/22 23:05:55 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_one.h"
 
-int				ft_atoi(const char *nbr)
+int				free_all(t_all *all, int error_number)
 {
-	int				i;
-	int				sign;
-	unsigned long	res;
+	int i;
 
-	i = 0;
-	res = 0;
-	sign = 1;
-	while ((nbr[i] >= '\t' && nbr[i] <= '\r') || nbr[i] == ' ')
-		i++;
-	if (nbr[i] == '+' || nbr[i] == '-')
+	if (error_number == JUST_FREE_ALL)
 	{
-		sign = (nbr[i] == '-') ? -1 : 1;
-		i++;
+		i = 0;
+		while (i < all->params.amount_of_philosophers)
+			if (pthread_mutex_destroy(&all->m_forks[i++]) != 0)
+				printf("mutex_destroy error\n");
+		pthread_mutex_destroy(&all->mutex_for_getting_philo_number);
+		pthread_mutex_destroy(&all->m_is_philo_dead);
+		pthread_mutex_destroy(&all->m_output_protect);
 	}
-	while (nbr[i] >= '0' && nbr[i] <= '9')
-	{
-		if ((res * 10 + (nbr[i] - '0')) < res)
-			return ((sign > 0) ? -1 : 0);
-		res = res * 10 + (nbr[i] - '0');
-		i++;
-	}
-	return (res * sign);
+	free(all->m_forks);
+	free(all->time_of_last_meal);
+	free(all->forks_status);
+	free(all->thread_id);
+	if (error_number == E_MALLOC)
+		printf("%s\n", E_MALLOC_TXT);
+	return (error_number);
 }
 
 int				right_fork_num(t_all *all, int philo_index)
@@ -43,14 +40,17 @@ int				right_fork_num(t_all *all, int philo_index)
 	return ((philo_index + 1) % all->params.amount_of_philosophers);
 }
 
-int				philo_death(t_all *all, ssize_t timestamp, int philo_num)
+int				philo_death(t_all *all, int philo_num)
 {
+	unsigned int	timestamp;
+
 	if (check_philo_status(all) == 0)
 	{
-		sem_wait(all->s_is_philo_dead);
+		timestamp = get_current_timestamp(all);
+		pthread_mutex_lock(&all->m_is_philo_dead);
 		all->is_philo_dead = 1;
-		sem_post(all->s_is_philo_dead);
-		printf("%zd %d died\n", timestamp, philo_num);
+		pthread_mutex_unlock(&all->m_is_philo_dead);
+		printf("%u %d died\n", timestamp, philo_num);
 	}
 	return (1);
 }
@@ -59,10 +59,10 @@ int				get_philosopher_number(t_all *all)
 {
 	int		tmp_philo_number;
 
-	sem_wait(all->s_for_getting_philo_number);
+	pthread_mutex_lock(&all->mutex_for_getting_philo_number);
 	all->tmp_philo_num++;
 	tmp_philo_number = all->tmp_philo_num;
-	sem_post(all->s_for_getting_philo_number);
+	pthread_mutex_unlock(&all->mutex_for_getting_philo_number);
 	return (tmp_philo_number);
 }
 

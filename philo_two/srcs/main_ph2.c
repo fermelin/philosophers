@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_philo_one.c                                   :+:      :+:    :+:   */
+/*   main_ph2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 16:35:54 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/18 21:10:29 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/22 23:25:12 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
-int		error_processing(int error_number, t_all *all)
+static int	error_processing(int error_number, t_all *all)
 {
 	if (error_number == E_ARG_NUM)
 		printf("%s\n", E_ARG_NUM_TXT);
@@ -23,17 +23,11 @@ int		error_processing(int error_number, t_all *all)
 	return (error_number);
 }
 
-int		init_all_params_2(t_all *all)
+static int	init_all_params_2(t_all *all)
 {
 	int	i;
 
-	if (!(all->m_forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
-		* all->params.amount_of_philosophers)))
-		return (E_MALLOC);
 	if (!(all->time_of_last_meal = (ssize_t *)malloc(sizeof(ssize_t)
-		* all->params.amount_of_philosophers)))
-		return (E_MALLOC);
-	if (!(all->forks_status = (int *)malloc(sizeof(int)
 		* all->params.amount_of_philosophers)))
 		return (E_MALLOC);
 	if (!(all->thread_id = (pthread_t *)malloc(sizeof(pthread_t)
@@ -41,17 +35,24 @@ int		init_all_params_2(t_all *all)
 		return (E_MALLOC);
 	i = 0;
 	while (i < all->params.amount_of_philosophers)
-	{
-		pthread_mutex_init(&all->m_forks[i], NULL);
-		all->time_of_last_meal[i] = 0;
-		all->forks_status[i] = i + 1 - i % 2;
-		i++;
-	}
+		all->time_of_last_meal[i++] = 0;
+	if ((all->s_for_getting_philo_number = sem_open(
+		"s_for_getting_philo_number", O_CREAT | O_EXCL, 744, 1)) == SEM_FAILED)
+		printf("s_for_getting_philo_number failed\n");
+	if ((all->s_forks = sem_open("s_forks", O_CREAT | O_EXCL, 744,
+		all->params.amount_of_philosophers)) == SEM_FAILED)
+		printf("s_forks failed\n");
+	if ((all->s_is_philo_dead = sem_open("s_is_philo_dead", O_CREAT | O_EXCL,
+		744, 1)) == SEM_FAILED)
+		printf("s_is_philo_dead failed\n");
+	if ((all->s_output_protect = sem_open("s_output_protect", O_CREAT | O_EXCL,
+		744, 1)) == SEM_FAILED)
+		printf("s_output_protect failed\n");
 	gettimeofday(&all->initial_time, NULL);
 	return (0);
 }
 
-int		init_all_params(t_all *all, char **argv, int argc)
+static int	init_all_params(t_all *all, char **argv, int argc)
 {
 	if ((all->params.amount_of_philosophers = ft_atoi(argv[1])) < 2)
 		return (E_WRONG_ARG);
@@ -68,45 +69,38 @@ int		init_all_params(t_all *all, char **argv, int argc)
 	}
 	else
 		all->params.times_must_eat = -1;
+	sem_unlink("s_for_getting_philo_number");
+	sem_unlink("s_forks");
+	sem_unlink("s_is_philo_dead");
+	sem_unlink("s_output_protect");
 	all->tmp_philo_num = 0;
 	all->is_philo_dead = 0;
-	all->m_forks = NULL;
 	all->time_of_last_meal = NULL;
-	all->forks_status = NULL;
 	all->thread_id = NULL;
-	pthread_mutex_init(&all->mutex_for_getting_philo_number, NULL);
-	pthread_mutex_init(&all->m_is_philo_dead, NULL);
-	pthread_mutex_init(&all->m_output_protect, NULL);
 	return (init_all_params_2(all));
 }
 
-void	*philosopher_routine(void *arg)
+static int	death_checking(t_all *all)
 {
-	t_all	*all;
-	int		philo_num;
-	int		i;
+	unsigned int	timestamp;
+	int				i;
 
-	all = (t_all *)arg;
-	philo_num = get_philosopher_number(all);
-	i = 0;
 	while (1)
 	{
-		if (take_forks(all, philo_num) != 0)
-			continue ;
-		if (eating(all, philo_num) != 0)
-			return (NULL);
-		i++;
-		if (all->params.times_must_eat != -1 && all->params.times_must_eat == i)
-			break ;
-		if (sleeping(all, philo_num) != 0)
-			return (NULL);
-		if (thinking(all, philo_num) != 0)
-			return (NULL);
+		i = 0;
+		timestamp = get_current_timestamp(all);
+		while (i < all->params.amount_of_philosophers)
+		{
+			if (timestamp - all->time_of_last_meal[i] > all->params.time_to_die)
+				return (philo_death(all, i + 1));
+			i++;
+		}
+		usleep(1000);
 	}
-	return (NULL);
+	return (0);
 }
 
-int		main(int argc, char **argv)
+int			main(int argc, char **argv)
 {
 	t_all		all;
 	int			i;
@@ -124,6 +118,7 @@ int		main(int argc, char **argv)
 			printf("%d pthread_create error\n", i);
 		i++;
 	}
+	death_checking(&all);
 	i = 0;
 	while (i < all.params.amount_of_philosophers)
 	{

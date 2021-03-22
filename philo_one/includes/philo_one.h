@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:04:31 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/18 21:10:00 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/23 00:05:48 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,23 +55,15 @@ typedef struct		s_all
 }					t_all;
 
 int					ft_atoi(const char *nbr);
-int					error_processing(int error_number, t_all *all);
-int					init_all_params(t_all *all, char **argv, int argc);
-int					philo_death(t_all *all, ssize_t timestamp,
-					int philo_num);
+int					philo_death(t_all *all, int philo_num);
 int					get_philosopher_number(t_all *all);
-int					thinking(t_all *all, int philo_num);
-int					sleeping(t_all *all, int philo_num);
-int					take_forks(t_all *all, int philo_num);
 int					put_forks(t_all *all, int philo_num);
-int					eating(t_all *all, int philo_num);
-int					left_fork_num(t_all *all, int philo_num);
 int					right_fork_num(t_all *all, int philo_num);
 unsigned int		get_current_timestamp(t_all *all);
 int					check_philo_status(t_all *all);
-int					print_status(t_all *all, ssize_t timestamp, int philo_num,
-					char *kind_of_action);
-int					pseudo_usleep(int action_time);
+unsigned int		print_status(t_all *all, int philo_num, char *action_kind);
+void				pseudo_usleep(t_all *all, int philo_num, int action_time);
 int					free_all(t_all *all, int error_number);
+void				*philosopher_routine(void *arg);
 
 #endif

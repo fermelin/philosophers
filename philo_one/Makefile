@@ -6,16 +6,17 @@
 #    By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/16 22:12:45 by fermelin          #+#    #+#              #
-#    Updated: 2021/03/21 16:52:59 by fermelin         ###   ########.fr        #
+#    Updated: 2021/03/22 23:08:25 by fermelin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo_one
 
-SRC =	./srcs/main_philo_one.c \
-		./srcs/utils_philo_one.c \
-		./srcs/utils2_philo_one.c \
-		./srcs/actions_philo_one.c
+SRC =	./srcs/main_ph1.c \
+		./srcs/utils_ph1.c \
+		./srcs/ft_atoi_ph1.c \
+		./srcs/actions_ph1.c \
+		./srcs/actions_utils_ph1.c
 
 OBJ = $(SRC:.c=.o)
 

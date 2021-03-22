@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_philo_three.c                                 :+:      :+:    :+:   */
+/*   main_ph3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 16:35:54 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/19 12:13:51 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/23 00:03:11 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
 
-int		error_processing(int error_number, t_all *all)
+static int		error_processing(int error_number, t_all *all)
 {
 	if (error_number == E_ARG_NUM)
 		printf("%s\n", E_ARG_NUM_TXT);
@@ -23,7 +23,7 @@ int		error_processing(int error_number, t_all *all)
 	return (error_number);
 }
 
-int		init_all_params_2(t_all *all)
+static int		init_all_params_2(t_all *all)
 {
 	all->time_of_last_meal = 0;
 	if ((all->s_forks = sem_open("s_forks", O_CREAT | O_EXCL, 744,
@@ -39,7 +39,7 @@ int		init_all_params_2(t_all *all)
 	return (0);
 }
 
-int		init_all_params(t_all *all, char **argv, int argc)
+static int		init_all_params(t_all *all, char **argv, int argc)
 {
 	if ((all->params.amount_of_philosophers = ft_atoi(argv[1])) < 2)
 		return (E_WRONG_ARG);
@@ -63,28 +63,7 @@ int		init_all_params(t_all *all, char **argv, int argc)
 	return (init_all_params_2(all));
 }
 
-void	philosopher_routine(t_all all, int philo_num)
-{
-	int		i;
-
-	i = 0;
-	while (1)
-	{
-		if (take_forks(&all, philo_num) != 0)
-			continue ;
-		if (eating(&all, philo_num) != 0)
-			exit(1);
-		i++;
-		if (all.params.times_must_eat != -1 && all.params.times_must_eat == i)
-			exit(0);
-		if (sleeping(&all, philo_num) != 0)
-			exit(1);
-		if (thinking(&all, philo_num) != 0)
-			exit(1);
-	}
-}
-
-int		main(int argc, char **argv)
+int				main(int argc, char **argv)
 {
 	t_all		all;
 	int			i;
@@ -103,6 +82,6 @@ int		main(int argc, char **argv)
 	}
 	i = 0;
 	waitpid(-1, NULL, 0);
-	kill(0, SIGTERM);
+	kill(0, SIGINT);
 	return (free_all(&all, JUST_FREE_ALL));
 }
