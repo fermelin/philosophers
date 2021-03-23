@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 16:35:54 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/23 00:03:11 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/23 12:42:21 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,27 @@ static int		init_all_params(t_all *all, char **argv, int argc)
 	sem_unlink("s_is_philo_dead");
 	sem_unlink("s_output_protect");
 	all->is_philo_dead = 0;
+	all->philo_num = 0;
 	return (init_all_params_2(all));
+}
+
+void			*death_checking(void *arg)
+{
+	t_all			*all;
+	unsigned int	timestamp;
+
+	all = (t_all *)arg;
+	while (1)
+	{
+		timestamp = get_current_timestamp(all);
+		if (timestamp - all->time_of_last_meal >= all->params.time_to_die)
+		{
+			philo_death(all, all->philo_num);
+			return (NULL);
+		}
+		usleep(1000);
+	}
+	return (0);
 }
 
 int				main(int argc, char **argv)
@@ -73,15 +93,17 @@ int				main(int argc, char **argv)
 		return (error_processing(E_ARG_NUM, &all));
 	if ((error_number = init_all_params(&all, argv, argc)) != 0)
 		return (error_processing(error_number, &all));
+	while (all.philo_num < all.params.amount_of_philosophers)
+	{
+		all.philo_num++;
+		if (fork() == 0)
+			philosopher_routine(all, all.philo_num);
+	}
 	i = 0;
 	while (i < all.params.amount_of_philosophers)
 	{
+		waitpid(-1, NULL, 0);
 		i++;
-		if (fork() == 0)
-			philosopher_routine(all, i);
 	}
-	i = 0;
-	waitpid(-1, NULL, 0);
-	kill(0, SIGINT);
 	return (free_all(&all, JUST_FREE_ALL));
 }

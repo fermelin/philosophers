@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:04:31 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/23 00:04:45 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/23 12:42:19 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <signal.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <pthread.h>
 
 # define E_ARG_NUM 10
 # define E_ARG_NUM_TXT "ERROR: Wrong number of arguments"
@@ -47,6 +48,8 @@ typedef struct		s_all
 	sem_t			*s_forks;
 	sem_t			*s_is_philo_dead;
 	sem_t			*s_output_protect;
+	pthread_t		thread_id;
+	int				philo_num;
 	struct timeval	initial_time;
 	ssize_t			time_of_last_meal;
 	int				is_philo_dead;
@@ -64,5 +67,6 @@ unsigned int		print_status(t_all *all, int philo_num, char *action_kind);
 void				pseudo_usleep(t_all *all, int action_time);
 int					free_all(t_all *all, int error_number);
 void				philosopher_routine(t_all all, int philo_num);
+void				*death_checking(void *arg);
 
 #endif

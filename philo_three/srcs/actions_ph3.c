@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 14:00:28 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/23 00:05:34 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/23 12:42:44 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,14 @@ static int	eating(t_all *all, int philo_num)
 	return (0);
 }
 
-void	philosopher_routine(t_all all, int philo_num)
+void		philosopher_routine(t_all all, int philo_num)
 {
 	int		i;
 
 	i = 0;
+	pthread_create(&all.thread_id, NULL,
+	&death_checking, &all);
+	pthread_detach(all.thread_id);
 	while (1)
 	{
 		if (take_forks(&all, philo_num) != 0)

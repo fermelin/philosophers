@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:03:49 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/23 00:05:37 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/23 12:43:05 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int				ft_atoi(const char *nbr)
 	return (res * sign);
 }
 
-int		free_all(t_all *all, int error_number)
+int				free_all(t_all *all, int error_number)
 {
 	if (error_number == JUST_FREE_ALL)
 	{

@@ -6,20 +6,20 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:51:52 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/23 00:06:55 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/23 12:42:54 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
 
-int			put_forks(t_all *all)
+int				put_forks(t_all *all)
 {
 	sem_post(all->s_forks);
 	sem_post(all->s_forks);
 	return (0);
 }
 
-int			check_philo_status(t_all *all)
+int				check_philo_status(t_all *all)
 {
 	int	status;
 
@@ -41,7 +41,7 @@ unsigned int	print_status(t_all *all, int philo_num, char *action_kind)
 	return (timestamp);
 }
 
-static int	is_time_out(struct timeval *measure_beginning, int action_time)
+static int		is_time_out(struct timeval *measure_beginning, int action_time)
 {
 	struct timeval		current_time;
 	unsigned long long	time_diff;
@@ -55,7 +55,7 @@ static int	is_time_out(struct timeval *measure_beginning, int action_time)
 	return (micro_action_time - time_diff);
 }
 
-void		pseudo_usleep(t_all *all, int action_time)
+void			pseudo_usleep(t_all *all, int action_time)
 {
 	int				sleep_left;
 	struct timeval	measure_beginning;
