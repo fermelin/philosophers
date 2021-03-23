@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 16:35:54 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/23 12:44:42 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/23 19:20:30 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static int	init_all_params(t_all *all, char **argv, int argc)
 	}
 	else
 		all->params.times_must_eat = -1;
+	all->fed_philo_amount = 0;
 	sem_unlink("s_for_getting_philo_number");
 	sem_unlink("s_forks");
 	sem_unlink("s_is_philo_dead");
@@ -91,6 +92,8 @@ static int	death_checking(t_all *all)
 		timestamp = get_current_timestamp(all);
 		while (i < all->params.amount_of_philosophers)
 		{
+			if (all->fed_philo_amount == all->params.amount_of_philosophers)
+				return (0);
 			if (timestamp - all->time_of_last_meal[i] >=
 				all->params.time_to_die)
 				return (philo_death(all, i + 1));

@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 14:00:28 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/22 23:32:38 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/23 19:18:49 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void		*philosopher_routine(void *arg)
 			return (NULL);
 		i++;
 		if (all->params.times_must_eat != -1 && all->params.times_must_eat == i)
-			break ;
+			return (philo_is_full(all));
 		if (sleeping(all, philo_num) != 0)
 			return (NULL);
 		if (thinking(all, philo_num) != 0)

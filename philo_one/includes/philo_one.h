@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:04:31 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/23 00:05:48 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/23 19:13:53 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct		s_all
 	struct timeval	initial_time;
 	ssize_t			*time_of_last_meal;
 	int				is_philo_dead;
+	int				fed_philo_amount;
 	t_params		params;
 }					t_all;
 
@@ -65,5 +66,6 @@ unsigned int		print_status(t_all *all, int philo_num, char *action_kind);
 void				pseudo_usleep(t_all *all, int philo_num, int action_time);
 int					free_all(t_all *all, int error_number);
 void				*philosopher_routine(void *arg);
+void				*philo_is_full(t_all *all);
 
 #endif
