@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 18:51:52 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/26 12:58:05 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/26 14:04:50 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,21 @@ int				check_philo_status(t_philo *ph)
 	return (status);
 }
 
-unsigned int	print_status(t_philo *ph, int philo_num, char *action_kind)
+int				print_status(t_philo *ph, int philo_num, char *action_kind)
 {
 	unsigned int timestamp;
 
-	timestamp = get_current_timestamp(ph);
-	sem_wait(ph->s_output_protect);
-	if (ph->is_philo_dead == 0)
-		printf("%u %d %s\n", timestamp, philo_num, action_kind);
-	sem_post(ph->s_output_protect);
-	return (timestamp);
+	if (check_philo_status(ph) == 0)
+	{
+		timestamp = get_current_timestamp(ph);
+		sem_wait(ph->s_output_protect);
+		if (ph->is_philo_dead == 0)
+			printf("%u %d %s\n", timestamp, philo_num, action_kind);
+		sem_post(ph->s_output_protect);
+		return (0);
+	}
+	else
+		return (1);
 }
 
 static int		is_time_out(struct timeval *measure_beginning, int action_time)

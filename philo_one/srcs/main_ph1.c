@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 16:35:54 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/26 12:58:48 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/26 14:58:15 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,7 @@ static int	death_checking(t_philo *ph)
 		{
 			if (ph->fed_philo_amount == ph->params.amount_of_philosophers)
 				return (0);
-			if (timestamp - ph->time_of_last_meal[i] >=
-				ph->params.time_to_die)
+			if (timestamp - ph->time_of_last_meal[i] >= ph->params.time_to_die)
 				return (philo_death(ph, i + 1));
 			i++;
 		}

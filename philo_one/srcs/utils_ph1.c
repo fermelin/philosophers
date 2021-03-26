@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:03:49 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/26 12:58:38 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/26 14:55:53 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ int				philo_death(t_philo *ph, int philo_num)
 		pthread_mutex_lock(&ph->m_is_philo_dead);
 		ph->is_philo_dead = 1;
 		pthread_mutex_unlock(&ph->m_is_philo_dead);
+		pthread_mutex_lock(&ph->m_output_protect);
 		printf("%u %d died\n", timestamp, philo_num);
+		pthread_mutex_unlock(&ph->m_output_protect);
 	}
 	return (1);
 }

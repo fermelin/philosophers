@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 22:53:22 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/26 12:58:53 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/26 15:17:53 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,15 @@ int				ft_atoi(const char *nbr)
 	return (res * sign);
 }
 
-void			*philo_is_full(t_philo *ph)
+void			*philo_is_full(t_philo *ph, int philo_num)
 {
+	int	kludge_for_not_dying_in_death_checking;
+
+	kludge_for_not_dying_in_death_checking = ph->params.time_to_die;
 	pthread_mutex_lock(&ph->mutex_for_getting_philo_number);
 	ph->fed_philo_amount++;
 	pthread_mutex_unlock(&ph->mutex_for_getting_philo_number);
+	ph->time_of_last_meal[philo_num - 1] +=
+	kludge_for_not_dying_in_death_checking;
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 14:00:28 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/26 12:58:11 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/26 14:11:06 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,15 @@
 
 static int	thinking(t_philo *ph, int philo_num)
 {
-	if (check_philo_status(ph) == 0)
-		print_status(ph, philo_num, "is thinking");
-	else
-		return (philo_death(ph, philo_num));
+	if (print_status(ph, philo_num, "is thinking") == 1)
+		return (1);
 	return (0);
 }
 
 static int	sleeping(t_philo *ph, int philo_num)
 {
-	if (check_philo_status(ph) == 0)
-		print_status(ph, philo_num, "is sleeping");
-	else
-		return (philo_death(ph, philo_num));
+	if (print_status(ph, philo_num, "is sleeping") == 1)
+		return (1);
 	pseudo_usleep(ph, ph->params.time_to_sleep);
 	return (0);
 }
@@ -37,26 +33,20 @@ static int	take_forks(t_philo *ph, int philo_num)
 	{
 		sem_wait(ph->s_forks);
 		sem_wait(ph->s_forks);
-		if (check_philo_status(ph) == 0)
-		{
-			print_status(ph, philo_num, "has taken a fork");
-			print_status(ph, philo_num, "has taken a fork");
-		}
+		print_status(ph, philo_num, "has taken a fork");
+		print_status(ph, philo_num, "has taken a fork");
 	}
-	else
-		return (1);
 	return (0);
 }
 
 static int	eating(t_philo *ph, int philo_num)
 {
-	if (check_philo_status(ph) == 0)
-		ph->time_of_last_meal = print_status(ph, philo_num, "is eating");
-	else
+	if (print_status(ph, philo_num, "is eating") == 1)
 	{
 		put_forks(ph);
-		return (philo_death(ph, philo_num));
+		return (1);
 	}
+	ph->time_of_last_meal = get_current_timestamp(ph);
 	pseudo_usleep(ph, ph->params.time_to_eat);
 	put_forks(ph);
 	return (0);
@@ -72,8 +62,7 @@ void		philosopher_routine(t_philo ph, int philo_num)
 	pthread_detach(ph.thread_id);
 	while (1)
 	{
-		if (take_forks(&ph, philo_num) != 0)
-			continue ;
+		take_forks(&ph, philo_num);
 		if (eating(&ph, philo_num) != 0)
 			exit(1);
 		i++;

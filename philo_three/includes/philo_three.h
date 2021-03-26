@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:04:31 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/26 12:58:17 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/26 14:11:20 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int					put_forks(t_philo *ph);
 int					right_fork_num(t_philo *ph, int philo_num);
 unsigned int		get_current_timestamp(t_philo *ph);
 int					check_philo_status(t_philo *ph);
-unsigned int		print_status(t_philo *ph, int philo_num, char *action_kind);
+int					print_status(t_philo *ph, int philo_num, char *action_kind);
 void				pseudo_usleep(t_philo *ph, int action_time);
 int					free_all(t_philo *ph, int error_number);
 void				philosopher_routine(t_philo ph, int philo_num);

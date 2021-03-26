@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:03:49 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/26 12:57:52 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/26 14:27:06 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int				philo_death(t_philo *ph, int philo_num)
 		timestamp = get_current_timestamp(ph);
 		sem_wait(ph->s_is_philo_dead);
 		ph->is_philo_dead = 1;
+		sem_wait(ph->s_output_protect);
 		printf("%u %d died\n", timestamp, philo_num);
 		kill(0, SIGINT);
 		sem_post(ph->s_is_philo_dead);
