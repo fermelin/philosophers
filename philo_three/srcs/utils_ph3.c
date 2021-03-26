@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:03:49 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/23 12:43:05 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/26 12:57:52 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ int				ft_atoi(const char *nbr)
 	return (res * sign);
 }
 
-int				free_all(t_all *all, int error_number)
+int				free_all(t_philo *ph, int error_number)
 {
 	if (error_number == JUST_FREE_ALL)
 	{
-		sem_close(all->s_forks);
-		sem_close(all->s_is_philo_dead);
-		sem_close(all->s_output_protect);
+		sem_close(ph->s_forks);
+		sem_close(ph->s_is_philo_dead);
+		sem_close(ph->s_output_protect);
 		sem_unlink("s_forks");
 		sem_unlink("s_is_philo_dead");
 		sem_unlink("s_output_protect");
@@ -54,34 +54,34 @@ int				free_all(t_all *all, int error_number)
 	return (error_number);
 }
 
-int				right_fork_num(t_all *all, int philo_index)
+int				right_fork_num(t_philo *ph, int philo_index)
 {
-	return ((philo_index + 1) % all->params.amount_of_philosophers);
+	return ((philo_index + 1) % ph->params.amount_of_philosophers);
 }
 
-int				philo_death(t_all *all, int philo_num)
+int				philo_death(t_philo *ph, int philo_num)
 {
 	unsigned int	timestamp;
 
-	if (check_philo_status(all) == 0)
+	if (check_philo_status(ph) == 0)
 	{
-		timestamp = get_current_timestamp(all);
-		sem_wait(all->s_is_philo_dead);
-		all->is_philo_dead = 1;
+		timestamp = get_current_timestamp(ph);
+		sem_wait(ph->s_is_philo_dead);
+		ph->is_philo_dead = 1;
 		printf("%u %d died\n", timestamp, philo_num);
 		kill(0, SIGINT);
-		sem_post(all->s_is_philo_dead);
+		sem_post(ph->s_is_philo_dead);
 	}
 	return (1);
 }
 
-unsigned int	get_current_timestamp(t_all *all)
+unsigned int	get_current_timestamp(t_philo *ph)
 {
 	struct timeval	current_time;
 	unsigned int	timestamp;
 
 	gettimeofday(&current_time, NULL);
-	timestamp = (current_time.tv_sec - all->initial_time.tv_sec) * 1000
-	+ (current_time.tv_usec - all->initial_time.tv_usec) / 1000;
+	timestamp = (current_time.tv_sec - ph->initial_time.tv_sec) * 1000
+	+ (current_time.tv_usec - ph->initial_time.tv_usec) / 1000;
 	return (timestamp);
 }

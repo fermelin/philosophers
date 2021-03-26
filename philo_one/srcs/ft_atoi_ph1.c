@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/22 22:53:22 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/23 19:13:54 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/26 12:58:53 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ int				ft_atoi(const char *nbr)
 	return (res * sign);
 }
 
-void			*philo_is_full(t_all *all)
+void			*philo_is_full(t_philo *ph)
 {
-	pthread_mutex_lock(&all->mutex_for_getting_philo_number);
-	all->fed_philo_amount++;
-	pthread_mutex_unlock(&all->mutex_for_getting_philo_number);
+	pthread_mutex_lock(&ph->mutex_for_getting_philo_number);
+	ph->fed_philo_amount++;
+	pthread_mutex_unlock(&ph->mutex_for_getting_philo_number);
 	return (NULL);
 }

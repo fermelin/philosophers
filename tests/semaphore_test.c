@@ -17,7 +17,7 @@
 #include <string.h>
 #include <sys/errno.h>
 
-/*int sem_post(sem_t *sem); - The semaphore referenced by sem is unlocked, the value of the semaphore is incremented, and all threads which are waiting on the semaphore are awakened.
+/*int sem_post(sem_t *sem); - The semaphore referenced by sem is unlocked, the value of the semaphore is incremented, and ph threads which are waiting on the semaphore are awakened.
 **
 ** sem_t *sem_open(const char *name, int oflag, ...); - sem_t *sem_open(const char *name, int oflag, mode_t mode, unsigned int value);
 ** If O_CREAT is specified, sem_open() requires an additional two arguments.The parameters "mode_t mode" and "unsigned int value" are optional.

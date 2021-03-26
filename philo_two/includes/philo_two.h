@@ -6,7 +6,7 @@
 /*   By: fermelin <fermelin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 18:04:31 by fermelin          #+#    #+#             */
-/*   Updated: 2021/03/23 19:19:48 by fermelin         ###   ########.fr       */
+/*   Updated: 2021/03/26 12:57:20 by fermelin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define E_WRONG_ARG_TXT "ERROR: Wrong arguments"
 
 # define E_MALLOC 12
-# define E_MALLOC_TXT "ERROR: Malloc failed"
+# define E_MALLOC_TXT "ERROR: Mphoc failed"
 
 # define JUST_FREE_ALL 0
 
@@ -41,7 +41,7 @@ typedef struct		s_params
 	int				times_must_eat;
 }					t_params;
 
-typedef struct		s_all
+typedef struct		s_philo
 {
 	sem_t			*s_forks;
 	sem_t			*s_for_getting_philo_number;
@@ -54,19 +54,19 @@ typedef struct		s_all
 	int				is_philo_dead;
 	int				fed_philo_amount;
 	t_params		params;
-}					t_all;
+}					t_philo;
 
 int					ft_atoi(const char *nbr);
-int					philo_death(t_all *all, int philo_num);
-int					get_philosopher_number(t_all *all);
-int					put_forks(t_all *all);
-int					right_fork_num(t_all *all, int philo_num);
-unsigned int		get_current_timestamp(t_all *all);
-int					check_philo_status(t_all *all);
-unsigned int		print_status(t_all *all, int philo_num, char *action_kind);
-void				pseudo_usleep(t_all *all, int philo_num, int action_time);
-int					free_all(t_all *all, int error_number);
+int					philo_death(t_philo *ph, int philo_num);
+int					get_philosopher_number(t_philo *ph);
+int					put_forks(t_philo *ph);
+int					right_fork_num(t_philo *ph, int philo_num);
+unsigned int		get_current_timestamp(t_philo *ph);
+int					check_philo_status(t_philo *ph);
+unsigned int		print_status(t_philo *ph, int philo_num, char *action_kind);
+void				pseudo_usleep(t_philo *ph, int philo_num, int action_time);
+int					free_all(t_philo *ph, int error_number);
 void				*philosopher_routine(void *arg);
-void				*philo_is_full(t_all *all);
+void				*philo_is_full(t_philo *ph);
 
 #endif
